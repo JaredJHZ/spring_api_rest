@@ -2,6 +2,7 @@ package com.josfhat.com.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
@@ -32,8 +33,13 @@ public class UserServices {
 		}
 	}
 	
-	public List<User> getUsers() {
-		return this.users;
+	public List<User> getUsers(String startsWith) {
+		if (startsWith != null) {
+			return this.users.stream().filter(u -> u.getUsername().startsWith(startsWith)).collect(Collectors.toList());
+		} else {
+			return this.users;
+		}
+
 	}
 	
 	public User getUserByUsername(String username) {
@@ -65,7 +71,6 @@ public class UserServices {
 	public void deleteUser(String username) {
 		User userToBeDeleted = this.getUserByUsername(username);
 		users.remove(userToBeDeleted);
-		return "Deleted";
 	}
 	
 }

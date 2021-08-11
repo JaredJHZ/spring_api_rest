@@ -16,7 +16,7 @@ import com.github.javafaker.Faker;
 import com.josfhat.com.models.*;
 
 @Service
-public class UserServices {
+public class UserServicesUsingLists {
 	
 	@Autowired
 	private Faker faker;

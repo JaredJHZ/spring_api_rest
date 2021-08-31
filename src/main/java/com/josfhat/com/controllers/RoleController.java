@@ -16,7 +16,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.josfhat.com.entities.Role;
+import com.josfhat.com.entities.User;
+import com.josfhat.com.entities.UserInRole;
 import com.josfhat.com.services.RoleService;
+import com.josfhat.com.services.UserInRoleServices;
 
 @RestController
 @RequestMapping("/roles")
@@ -24,6 +27,9 @@ public class RoleController {
 	
 	@Autowired
 	private RoleService service;
+	
+	@Autowired
+	private UserInRoleServices userInRoleService;
 	
 	@GetMapping
 	public ResponseEntity<List<Role>> getRoles() {
@@ -44,6 +50,31 @@ public class RoleController {
 	public ResponseEntity<Void> deleteRole(@PathVariable("roleId") Integer id) {
 		service.deleteRole(id);
 		return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+	}
+	
+	@PostMapping("/{roleId}/user/{userId}")
+	public ResponseEntity<UserInRole> addRoleToUser(
+			@PathVariable("roleId") Integer roleId,
+			@PathVariable("userId") Integer userId,
+			@RequestBody UserInRole userInRole
+			) {
+			
+		return new ResponseEntity<UserInRole>(
+			this.userInRoleService.addRoleToUser(roleId, userId, userInRole),
+			HttpStatus.CREATED
+		);
+		
+	}
+	
+	@GetMapping("/{roleId}/users")
+	public ResponseEntity<List<UserInRole>> getAllUsersInRole(@PathVariable("roleId") Integer id) {
+		return new ResponseEntity<List<UserInRole>>(this.userInRoleService.getAllUsersInRole(id), HttpStatus.OK);
+	}
+	
+	@GetMapping("/user/{userId}")
+	public ResponseEntity<List<UserInRole>> getAllRolesInUser(
+			@PathVariable("userId") Integer userId ){
+		return new ResponseEntity<List<UserInRole>>( this.userInRoleService.getAllRolesInUser(userId) , HttpStatus.OK);
 	}
 	
 }

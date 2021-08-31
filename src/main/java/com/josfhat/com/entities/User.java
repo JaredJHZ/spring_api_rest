@@ -1,5 +1,6 @@
 package com.josfhat.com.entities;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 import javax.persistence.Column;
@@ -13,18 +14,23 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="users")
-public class User {
+public class User implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5517280087942790468L;
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id")
 	private Integer id;
+	
 	@Column(name="username")
 	private String username;
+	
 	@Column(name="password")
 	private String password;
-	@OneToOne
-	@JoinColumn(name="profile_id", referencedColumnName="id")
-	private Profile profile;
+
 	public Integer getId() {
 		return id;
 	}
@@ -43,12 +49,7 @@ public class User {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public Profile getProfile() {
-		return profile;
-	}
-	public void setProfile(Profile profile) {
-		this.profile = profile;
-	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);

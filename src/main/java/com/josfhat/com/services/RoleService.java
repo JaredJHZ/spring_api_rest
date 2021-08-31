@@ -24,6 +24,11 @@ public class RoleService {
 	public Role createRole(Role role) {
 		return repository.save(role);
 	}
+	
+	public Role getRoleById(Integer roleId) {
+		return repository.findById(roleId).orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No role found") );
+	}
+	
 	public Role updateRole(Integer roleId, Role role) {
 		Optional<Role> result = repository.findById(roleId);
 		if(result.isPresent()) {

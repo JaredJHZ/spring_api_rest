@@ -9,13 +9,18 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.josafhat.com.Repositories.UserInRoleRepository;
 import com.josafhat.com.Repositories.UserRepository;
 import com.josfhat.com.entities.User;
+import com.josfhat.com.models.JosafhatSecurityRule;
 
-
+//@JosafhatSecurityRule -> si quiere ponerle esta regla a todos los metodos de la clase
 @Service
 public class UserService {
 	
@@ -23,6 +28,19 @@ public class UserService {
 	
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private UserInRoleRepository userInRoleRepository;
+	
+	
+	//@Secured({"ROLE_ADMIN"})
+//	@PreAuthorize("hasRole('ROLE_IT') or hasRole('ROLE_Admin')")
+//	@PostAuthorize("hasRole('ROLE_Admin')")
+	@JosafhatSecurityRule
+	public List<User> getUsersByRole(String roleName) {
+		System.out.println("Getting roles by name");
+		return userInRoleRepository.findUsersByRoleName(roleName);
+	}
 	
 	public Page<User> getUsers(int page, int size) {
 		return userRepository.findAll(PageRequest.of(page, size));
